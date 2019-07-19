@@ -1,0 +1,12 @@
+{
+    "name": "Node.js (latest LTS) & TypeScript",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "development",
+    "workspaceFolder": "/workspace",
+    "extensions": [
+        "visualstudioexptteam.vscodeintellicode",
+        "esbenp.prettier-vscode",
+        "wallabyjs.quokka-vscode"
+    ],
+    "shutdownAction": "stopCompose"
+}

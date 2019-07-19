@@ -1,0 +1,20 @@
+{
+    "name": "@nimashoghi/add-tsconfig-references",
+    "version": "0.0.3",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "bin": {
+        "add-tsconfig-references": "./dist/index.js"
+    },
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc --watch",
+        "prepublish": "yarn build",
+        "publish:public": "yarn publish --access public"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "@types/node": "^12.6.8",
+        "typescript": "^3.5.3"
+    }
+}
