@@ -53,13 +53,14 @@ interface ProcessedPackages {
 }
 
 const processPackage = async (
+    prefix: string,
     directory: string,
     dependencies: Dependencies,
 ): Promise<ProcessedPackages> => ({
     directory,
     dependencies: await Promise.all(
         Object.keys(dependencies)
-            .filter(dep => dep.startsWith("@prosay"))
+            .filter(dep => dep.startsWith(prefix))
             .map(async name => ({
                 name,
                 directory: await getPackageDirectory(name),
@@ -67,7 +68,7 @@ const processPackage = async (
     ),
 })
 
-const getAllDependencies = async () =>
+const getAllDependencies = async (prefix: string) =>
     await Promise.all(
         getDirectories(packageDir).map(async directory => ({
             directory,
@@ -80,7 +81,7 @@ const getAllDependencies = async () =>
             await Promise.all(
                 pckgs.map(
                     async ({directory, dependencies = {}}) =>
-                        await processPackage(directory, dependencies),
+                        await processPackage(prefix, directory, dependencies),
                 ),
             ),
     )
@@ -99,8 +100,13 @@ const addReferencesTo = async ({
     await fs.writeFile(tsconfigPath, JSON.stringify(newTsconfig, undefined, 4))
 }
 
+const getPackagePrefix = async () => {
+    const {name} = JSON.parse((await fs.readFile("./package.json")).toString())
+    return `@${name}/`
+}
+
 const main = async () => {
-    await getAllDependencies().then(
+    await getAllDependencies(await getPackagePrefix()).then(
         async dependencies =>
             await Promise.all(
                 dependencies.map(async pckgs => await addReferencesTo(pckgs)),
