@@ -80,8 +80,15 @@ const getAllDependencies = async (prefix: string) =>
         async pckgs =>
             await Promise.all(
                 pckgs.map(
-                    async ({directory, dependencies = {}}) =>
-                        await processPackage(prefix, directory, dependencies),
+                    async ({
+                        directory,
+                        dependencies = {},
+                        devDependencies = {},
+                    }) =>
+                        await processPackage(prefix, directory, {
+                            ...devDependencies,
+                            ...dependencies,
+                        }),
                 ),
             ),
     )
